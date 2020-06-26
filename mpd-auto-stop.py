@@ -7,6 +7,7 @@ import urlparse
 import json
 import signal
 import sys
+import argparse
 from datetime import datetime, timedelta
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
@@ -67,9 +68,25 @@ class Timer(object):
     def status(self):
         return self._status
 
+    @property
+    def mpd_host(self):
+        return self._mpd_host
+
+    @mpd_host.setter
+    def mpd_host(self, value):
+        self._mpd_host = value
+
+    @property
+    def mpd_port(self):
+        return self._mpd_port
+
+    @mpd_port.setter
+    def mpd_port(self, value):
+        self._mpd_port = value
+
     def _worker(self):
         try:
-            output = subprocess.check_output(["mpc", "--host=192.168.0.106", "pause"])
+            output = subprocess.check_output(["mpc", "--host={0}".format(self._mpd_host), "--port={0}".format(self._mpd_port), "pause"])
 
             Log.print_ok(output)
         except subprocess.CalledProcessError as exp:
@@ -428,7 +445,7 @@ class TimerRequestHandler(BaseHTTPRequestHandler):
     def _match_all(self, match):
         return (404, {}, "Not found")
 
-# main
+# app
 class App(object):
     def __init__(self, host, port):
         self.host = host
@@ -457,17 +474,24 @@ class App(object):
             self.server.server_close()
             Log.print_ok("Stopped...")
 
+# arguments
+def parse_args():
+    parser = argparse.ArgumentParser(description="MPD Auto Stop - auto stopping Music Player Daemon, by setting up timers")
+    parser.add_argument("-a", "--host", help="Host to run the server on [default: 0.0.0.0]", default="0.0.0.0")
+    parser.add_argument("-p", "--port", help="Port to the server should listen on [default: 9090]", default=9090, type=int)
+    parser.add_argument("-mh", "--mpd-host", help="Host where mpd runs [default: localhost]", default="localhost")
+    parser.add_argument("-mp", "--mpd-port", help="Port where mpd listens on [default: 6600]", default=6600, type=int)
+
+    return parser.parse_args()
+
+# main
 timer = Timer()
 
 if __name__ == "__main__":
-    host = "0.0.0.0"
-    port = 9090
+    args = parse_args()
 
-    if len(sys.argv) > 1:
-        host = xstr(sys.argv[1])
+    timer.mpd_host = args.mpd_host
+    timer.mpd_port = args.mpd_port
 
-    if len(sys.argv) > 2:
-        port = xint(sys.argv[2])
-
-    app = App(host, port)
+    app = App(args.host, args.port)
     app.start()
