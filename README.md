@@ -1,8 +1,10 @@
-```
+# MPD Auto Stop
+
+``` text
 ,-.-.,---.,--.     ,---..   .--.--,---.    ,---.--.--,---.,---.
 | | ||---'|   |    |---||   |  |  |   |    `---.  |  |   ||---'
-| | ||    |   |    |   ||   |  |  |   |        |  |  |   ||    
-` ' '`    `--'     `   '`---'  `  `---'    `---'  `  `---'` 
+| | ||    |   |    |   ||   |  |  |   |        |  |  |   ||
+` ' '`    `--'     `   '`---'  `  `---'    `---'  `  `---'`
 ```
 
 A pure python web utility for auto stopping *Music Player Daemon*, by setting up timers.
@@ -13,7 +15,7 @@ This is simple project that I wanted to use on my *Raspberrypi*, since I've conn
 
 ## Requirements
 
-* `Python 2.7`
+* `Python 2.7+` (tested with `v2.7.13`) or `Python 3.5+` (tested with `v3.5.3`)
 * `mpc` (issues the actual commands to `mpd`)
 
 ## Installation
@@ -25,14 +27,14 @@ Copy or simlink `mpd-auto-stop.py` to a location that's on your `PATH`.
 ### system
 
 * Copy `mpd-auto-start.service.sample` to `/etc/systemd/system/mpd-auto-start.service`
-* **enable** - `sudo systemctl enable mpd-auto-start` 
+* **enable** - `sudo systemctl enable mpd-auto-start`
 * **start** - `sudo systemctl start mpd-auto-start`
 * **stop** - `sudo systemctl stop mpd-auto-start`
 
 ### user
 
 * Copy `mpd-auto-start.service.sample` to `/etc/systemd/user/mpd-auto-start.service`
-* **enable** - `systemctl --user enable mpd-auto-start` 
+* **enable** - `systemctl --user enable mpd-auto-start`
 * **start** - `systemctl --user start mpd-auto-start`
 * **stop** - `systemctl --user stop mpd-auto-start`
 
@@ -40,7 +42,7 @@ Copy or simlink `mpd-auto-stop.py` to a location that's on your `PATH`.
 
 ## Usage
 
-```
+```text
 usage: python mpd-auto-stop.py [-h] [-a HOST] [-p PORT] [-mh MPD_HOST] [-mp MPD_PORT]
 
 MPD Auto Stop - auto stopping Music Player Daemon, by setting up timers
@@ -57,7 +59,7 @@ optional arguments:
 
 ## Example
 
-```
+``` text
 python mpd-auto-stop.py --host 127.0.0.1 --port 10000 --mpd-host 192.168.0.10 --mpd-port 16600
 ```
 

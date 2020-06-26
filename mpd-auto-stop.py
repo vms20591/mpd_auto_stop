@@ -1,15 +1,23 @@
-#!/usr/bin/env python
+from __future__ import print_function
 import time
 import threading
 import subprocess
 import re
-import urlparse
+try:
+    import urlparse
+except ImportError:
+    import urllib.parse as urlparse
 import json
 import signal
 import sys
 import argparse
 from datetime import datetime, timedelta
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+try:
+    # python 2
+    from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+except ImportError:
+    # python 3
+    from http.server import BaseHTTPRequestHandler, HTTPServer
 
 # utils
 def xstr(text):
@@ -23,13 +31,13 @@ def xstr(text):
 
 def xint(text, default=0):
     try:
-        return int(text)
+        return int(xstr(text))
     except Exception as exp:
         return default
 
 def xfloat(text, default=0.0):
     try:
-        return float(text)
+        return float(xstr(text))
     except Exception as exp:
         return default
 
@@ -38,7 +46,7 @@ class Log(object):
     def print_ok(format, *args):
         format = xstr(format)
 
-        print format.format(*args)
+        print(format.format(*args))
 
 # exceptions
 class TimerExistsError(Exception): pass
@@ -273,7 +281,7 @@ class TimerRequestHandler(BaseHTTPRequestHandler):
 
         self.send_response(status)
         self.end_headers()
-        self.wfile.write(result)
+        self.wfile.write(result.encode("utf8"))
 
         return
     
@@ -362,7 +370,7 @@ class TimerRequestHandler(BaseHTTPRequestHandler):
             }
 
             return (400, headers, json.dumps(result))
-        except InvalidTimerStateError, exp:
+        except InvalidTimerStateError as exp:
             result = {
                 "error": exp.message
             }
@@ -429,7 +437,7 @@ class TimerRequestHandler(BaseHTTPRequestHandler):
             }
 
             return (400, headers, json.dumps(result))
-        except InvalidTimerStateError, exp:
+        except InvalidTimerStateError as exp:
             result = {
                 "error": exp.message
             }
