@@ -20,7 +20,10 @@ This is simple project that I wanted to use on my *Raspberrypi*, since I've conn
 
 ## Installation
 
-Copy or simlink `mpd-auto-stop.py` to a location that's on your `PATH`.
+* Clone this repo
+* Run, `python setup.py install` or `pip install .`
+
+This would install a script called `mpd_auto_stop`.
 
 ## systemd installation (optional) (GNU/Linux)
 
@@ -38,12 +41,12 @@ Copy or simlink `mpd-auto-stop.py` to a location that's on your `PATH`.
 * **start** - `systemctl --user start mpd-auto-start`
 * **stop** - `systemctl --user stop mpd-auto-start`
 
-**Note:** To run on different host & port, update `ExecStart` in service file. **Example:** `ExecStart=/usr/bin/mpd-auto-stop --host 0.0.0.0 --port 5000`. Refer to usage section for more details.
+**Note:** To run on different host & port, update `ExecStart` in service file. **Example:** `ExecStart=/usr/bin/mpd_auto_stop --host 0.0.0.0 --port 5000`. Refer to usage section for more details.
 
 ## Usage
 
 ```text
-usage: python mpd-auto-stop.py [-h] [-a HOST] [-p PORT] [-mh MPD_HOST] [-mp MPD_PORT]
+usage: mpd_auto_stop [-h] [-a HOST] [-p PORT] [-mh MPD_HOST] [-mp MPD_PORT]
 
 MPD Auto Stop - auto stopping Music Player Daemon, by setting up timers
 
@@ -60,8 +63,12 @@ optional arguments:
 ## Example
 
 ``` text
-python mpd-auto-stop.py --host 127.0.0.1 --port 10000 --mpd-host 192.168.0.10 --mpd-port 16600
+python bin/mpd_auto_stop --host 127.0.0.1 --port 10000 --mpd-host 192.168.0.10 --mpd-port 16600
 ```
+
+## Tests
+
+From the project root run, `python setup.py test`
 
 ## Available APIs
 

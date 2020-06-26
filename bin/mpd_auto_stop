@@ -1,0 +1,5 @@
+#!/usr/bin/env python
+import mpd_auto_stop
+
+if __name__ == "__main__":
+  mpd_auto_stop.main()
